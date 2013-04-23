@@ -1,0 +1,273 @@
+<html>
+	
+	<head>
+	
+	<style>
+
+	#container{
+		
+		
+		position:absolute;
+	}
+
+
+	</style>
+	
+	
+	
+	
+	</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="highchars.js"></script>
+
+<script type="text/javascript">
+
+
+
+
+
+
+function createScale(max){
+  var maxArea = Math.pow(max,2)*Math.PI;
+  return function scale(n){
+    return Math.sqrt(((n*maxArea)/100)/Math.PI);
+  } 
+}
+
+function intersection(x0, y0, r0, x1, y1, r1) {
+  var a, dx, dy, d, h, rx, ry;
+  var x2, y2, i=0;
+
+  /* dx and dy are the vertical and horizontal distances between
+   * the circle centers.
+   */
+  dx = x1 - x0;
+  dy = y1 - y0;
+
+  /* Determine the straight-line distance between the centers. */
+  d = Math.sqrt((dy*dy) + (dx*dx));
+  while(i<0){ //TODO
+
+    /* Check for solvability. */
+    if (!( d > (r0 + r1) || d < Math.abs(r0-r1))) {
+        /* no solution. circles do not intersect. */
+        /* no solution. one circle is contained in the other */
+        // return false;
+        break;
+    }
+    d++;
+    console.log(d)
+    i++;
+  }
+  if(i===5) return false;
+
+  /* 'point 2' is the point where the line through the circle
+   * intersection points crosses the line between the circle
+   * centers.  
+   */
+
+  /* Determine the distance from point 0 to point 2. */
+  a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d) ;
+
+  /* Determine the coordinates of point 2. */
+  x2 = x0 + (dx * a/d);
+  y2 = y0 + (dy * a/d);
+
+  /* Determine the distance from point 2 to either of the
+   * intersection points.
+   */
+  h = Math.sqrt((r0*r0) - (a*a));
+
+  /* Now determine the offsets of the intersection points from
+   * point 2.
+   */
+  rx = -dy * (h/d);
+  ry = dx * (h/d);
+
+  /* Determine the absolute intersection points. */
+  var xi = x2 + rx;
+  var xi_prime = x2 - rx;
+  var yi = y2 + ry;
+  var yi_prime = y2 - ry;
+
+  return [xi, xi_prime, yi, yi_prime];
+}
+
+var svgWidth=500;
+var svgHeight=450;
+var venPositionX=null;
+var venPositionY=null;
+
+function sizeContainer(width, height){
+	
+	
+	svgWidth=width;
+	svgHeight=height;
+	
+	document.getElementById('container').style.width=width;
+	document.getElementById('container').style.height=height;
+		
+
+	venPositionX=(width*0.40);
+	venPositionY=(height*0.60);
+	
+	circleSize=width/5; //our max size is 500px  of width
+
+	return circleSize;
+	
+} //position and size of container. return circle porcentage
+
+
+var percentageSize=sizeContainer(200, 250, 100, 100);
+
+var scale = createScale(percentageSize);
+// http://chart.googleapis.com/chart?chf=bg,s,FFFFFF
+// &cht=v
+// &chs=519x300
+// &chco=e4db76,a9d8b0,4cc5c1
+// &chd=t:100.00000,59.96593,67.12095,2.04429,2.55537,2.38501,0.34072
+
+rA = scale(100);
+rB = scale(60);
+rC = scale(100);
+
+ab = scale(10);
+ac = scale(10);
+cb = scale(10);
+
+//tamaño del svg
+
+
+
+
+
+cA = {x: venPositionX, y: venPositionY};
+cB = {x: cA.x+rA+rB-2*ab, y: cA.y};
+
+
+//ORANGE CIRCLE //
+rAC = rA+rC-ac*2;
+rCB = rB+rC-cb*2;
+
+
+var intsec = intersection(cA.x, cA.y, rAC, cB.x, cB.y, rCB);
+var cC = {x: intsec[1], y: intsec[3]};
+
+//*INTERSECTION ABC *//
+	//INTERSECTION OF A CIRCLE AND B CIRCLE
+intsec=intersection(cA.x, cA.y, rA, cB.x, cB.y, rB);
+ABinter={x0: intsec[1], y0: intsec[3], x1: intsec[0], y1: intsec[2]};
+	//INTERSECTION OF A CIRCLE AND C CIRCLE
+intsec=intersection(cA.x, cA.y, rA, cC.x, cC.y, rC);
+ACinter={x0: intsec[1], y0: intsec[3], x1: intsec[0], y1: intsec[2]};
+	//INTERSECTION OF B CIRCLE AND C CIRCLE
+intsec=intersection(cB.x, cB.y, rB, cC.x, cC.y, rC);
+BCinter={x0: intsec[1], y0: intsec[3], x1: intsec[0], y1: intsec[2]};
+
+
+
+//INTERSECTION ABC
+ABCinter={x0:ABinter.x0, y0:ABinter.y0, x1:ACinter.x1, y1:ACinter.y1, x2:BCinter.x0, y2:BCinter.y0};
+
+
+var renderer = new Highcharts.Renderer(
+    $('#container')[0],
+    svgWidth, 
+    svgHeight
+);
+
+
+
+renderer.circle(cA.x, cA.y, rA, rA).attr({
+    fill: 'blue',
+ 
+    'fill-opacity': 0.5,
+    'stroke-width': 1
+}).add();
+
+
+renderer.circle(cB.x, cB.y, rB, rB).attr({
+    fill: 'green',
+    'fill-opacity': 0.5,
+    'stroke-width': 1
+}).add();
+
+renderer.circle(cC.x, cC.y, rC, rC).attr({
+    fill: 'orange',
+    'fill-opacity': 0.5,
+    'stroke-width': 1
+}).add();
+//A B INTERSECTION 
+renderer.path(['M', ABinter.x0, ABinter.y0, 'A', rB, rB ,0, 0, 0, ABinter.x1, ABinter.y1, 'M', ABinter.x0, ABinter.y0, 'A', rA, rA, 0, 0, 1, ABinter.x1, ABinter.y1]).attr({
+	fill: 'red',
+    'fill-opacity': 0.5,
+    'stroke-width': 1,
+	onclick:"alert('inter AB')"
+	
+
+}).add();
+//A C INTERSECTION
+renderer.path(['M', ACinter.x0, ACinter.y0, 'A', rC, rC ,0, 0, 0, ACinter.x1, ACinter.y1, 'M', ACinter.x0, ACinter.y0, 'A', rA, rA, 0, 0, 1, ACinter.x1, ACinter.y1]).attr({
+	fill: 'red',
+    'fill-opacity': 0.5,
+    'stroke-width': 1,
+	onclick:"alert('inter AC')"
+
+}).add();
+
+
+//B C INTERSECTION
+renderer.path(['M', BCinter.x0, BCinter.y0, 'A', rC, rC ,0, 0, 0, BCinter.x1, BCinter.y1, 'M', BCinter.x0, BCinter.y0, 'A', rB, rB, 0, 0, 1, BCinter.x1, BCinter.y1]).attr({
+	fill: 'red',
+    'fill-opacity': 0.5,
+    'stroke-width': 1,
+	onclick:"alert('inter BC')"
+
+}).add();
+
+
+
+
+//ABC INTERSECTION
+
+
+renderer.path(['M', ABCinter.x0, ABCinter.y0, 'A', rA, rA ,0, 0, 1, ABCinter.x1, ABCinter.y1, 'M', 
+               ABCinter.x1, ABCinter.y1, 'A', rC, rC, 0, 0, 1, ABCinter.x2, ABCinter.y2, 'M', 
+               ABCinter.x2, ABCinter.y2, 'A', rB, rB, 0, 0, 1, ABCinter.x0, ABCinter.y0,
+               'M', ABCinter.x0, ABCinter.y0, 'L', ABCinter.x1, ABCinter.y1, 'L', 
+                ABCinter.x2, ABCinter.y2, 'z']).attr({
+	fill: 'blue',
+    'fill-opacity': 0.5,
+    'stroke-width': 1,
+	onclick:"alert('inter ABC')"
+
+}).add();
+
+
+
+
+
+
+
+
+
+
+
+//Debugging
+// renderer.circle(cA.x, cA.y, rAC, rAC).attr({
+//     fill: 'transparent',
+//     stroke: 'orange',
+//     'stroke-width': 1
+// }).add();
+
+// renderer.circle(cB.x, cB.y, rCB, rCB).attr({
+//     fill: 'transparent',
+//     stroke: 'orange',
+//     'stroke-width': 1
+// }).add();
+
+
+</script>
+
