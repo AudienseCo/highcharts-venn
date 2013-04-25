@@ -1,4 +1,4 @@
 highcharts-venn
 ===============
 
-hola 565
+Venn chart for Highcharts :)
