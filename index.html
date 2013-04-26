@@ -29,7 +29,7 @@
 	
 
 	
-	<script type="text/javascript" src="highchars.js"></script>
+	<script type="text/javascript" src="test/js/highcharts/highcharts.js"></script>
 	
 		<script type="text/javascript">
 			
@@ -487,7 +487,6 @@ if(rC!=null){
 		//B C INTERSECTION
 		
 	    eje=lineInterBC();
-	    alert(eje);
 		renderer.path(['M', BCinter.x0, BCinter.y0, 'A', rC, rC ,0, eje, 0, BCinter.x1, BCinter.y1, 'M', BCinter.x0, BCinter.y0, 'A', rB, rB, 0, 0, 1, BCinter.x1, BCinter.y1]).attr({
 			fill: 'red',
 			'fill-opacity': 0.5,

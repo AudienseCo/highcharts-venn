@@ -1,7 +1,10 @@
 $(function(){
   var aEl = $('#setA'),
       bEl = $('#setB'),
-      cEl = $('#setC');
+      cEl = $('#setC'),
+      abEl = $('#intAB'),
+      bcEl = $('#intBC'),
+      acEl = $('#intAC');
   $('#form').submit(function(e){
     $('#chart-form').highcharts({
       title: {
@@ -17,7 +20,7 @@ $(function(){
               ['IE',       +bEl.val()],
               ['Chrome',  +cEl.val()]
           ],
-          intersections: [10, 10, 10]
+          intersections: [+abEl.val(), +bcEl.val(), +acEl.val()]
       }]
     });
     return false;
