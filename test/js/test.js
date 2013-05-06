@@ -8,8 +8,9 @@ $(function(){
   $('input').change(function(e){
     $('#chart-form').highcharts({
       title: {
-          text: 'Browser market shares at a specific website, 2010'
+          text: 'My followers'
       },
+      tooltip: { enabled: true },
       plotOptions: {
           venn: { showInLegend: true }
       },
