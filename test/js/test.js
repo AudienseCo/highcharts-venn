@@ -5,7 +5,7 @@ $(function(){
       abEl = $('#intAB'),
       bcEl = $('#intBC'),
       acEl = $('#intAC');
-  $('#form').submit(function(e){
+  $('input').change(function(e){
     $('#chart-form').highcharts({
       title: {
           text: 'Browser market shares at a specific website, 2010'
