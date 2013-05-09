@@ -8,20 +8,22 @@ $(function(){
   $('input').change(function(e){
     $('#chart-form').highcharts({
       title: {
-          text: 'My followers'
+          text: 'Account Comparision'
       },
       tooltip: { enabled: true },
       plotOptions: {
-          venn: { showInLegend: true }
+          venn: { showInLegend: false }
       },
       series: [{
           type: 'venn',
           data: [
-              ['Firefox',   +aEl.val()],
-              ['IE',       +bEl.val()],
-              ['Chrome',  +cEl.val()]
-          ],
-          intersections: [+abEl.val(), +bcEl.val(), +acEl.val()]
+              ['@ivanguardado', +aEl.val()],
+              ['@igayoso',       +bEl.val()],
+              ['Otro',  +cEl.val()],
+              ['@igayoso - @ivanguardado', +abEl.val()],
+              ['@igayoso - otro', +bcEl.val()],
+              ['@ivanguardado - otro', +acEl.val()]
+          ]
       }]
     });
     return false;
