@@ -12,7 +12,20 @@ $(function(){
       },
       tooltip: { enabled: true },
       plotOptions: {
-          venn: { showInLegend: false }
+          series: { 
+            showInLegend: false,
+            point: {
+              events: {
+                mouseOver: function(){
+                  this.graphic.element.setAttribute('stroke-width', 2);
+                  this.graphic.element.setAttribute('stroke', '#00f');
+                },
+                mouseOut: function () {
+                  this.graphic.element.setAttribute('stroke-width', 0);
+                }
+              }
+            }
+           }
       },
       series: [{
           type: 'venn',
