@@ -12,7 +12,7 @@ $(function(){
       },
       tooltip: { enabled: true },
       plotOptions: {
-          series: { 
+          series: {
             showInLegend: false,
             point: {
               events: {
@@ -25,20 +25,20 @@ $(function(){
                 }
               }
             }
-           }
+          }
       },
       series: [{
           type: 'venn',
           data: [
-              ['@ivanguardado', +aEl.val()],
-              ['@igayoso',       +bEl.val()],
-              ['Otro',  +cEl.val()],
-              ['@igayoso - @ivanguardado', +abEl.val()],
-              ['@igayoso - otro', +bcEl.val()],
-              ['@ivanguardado - otro', +acEl.val()]
+              ['A', +aEl.val()],
+              ['B', +bEl.val()],
+              ['C', +cEl.val()],
+              ['A - B', +abEl.val()],
+              ['B - C', +bcEl.val()],
+              ['A - C', +acEl.val()]
           ]
       }]
     });
     return false;
-  }).trigger('submit');
+  }).trigger('change');
 })
