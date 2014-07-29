@@ -12,20 +12,33 @@ $(function(){
       },
       tooltip: { enabled: true },
       plotOptions: {
-          venn: { showInLegend: false }
+          series: {
+            showInLegend: false,
+            point: {
+              events: {
+                mouseOver: function(){
+                  this.graphic.element.setAttribute('stroke-width', 2);
+                  this.graphic.element.setAttribute('stroke', '#00f');
+                },
+                mouseOut: function () {
+                  this.graphic.element.setAttribute('stroke-width', 0);
+                }
+              }
+            }
+          }
       },
       series: [{
           type: 'venn',
           data: [
-              ['@ivanguardado', +aEl.val()],
-              ['@igayoso',       +bEl.val()],
-              ['Otro',  +cEl.val()],
-              ['@igayoso - @ivanguardado', +abEl.val()],
-              ['@igayoso - otro', +bcEl.val()],
-              ['@ivanguardado - otro', +acEl.val()]
+              ['A', +aEl.val()],
+              ['B', +bEl.val()],
+              ['C', +cEl.val()],
+              ['A - B', +abEl.val()],
+              ['B - C', +bcEl.val()],
+              ['A - C', +acEl.val()]
           ]
       }]
     });
     return false;
-  }).trigger('submit');
+  }).trigger('change');
 })
