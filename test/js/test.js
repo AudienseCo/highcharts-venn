@@ -17,11 +17,17 @@ $(function(){
             point: {
               events: {
                 mouseOver: function(){
-                  this.graphic.element.setAttribute('stroke-width', 2);
-                  this.graphic.element.setAttribute('stroke', '#00f');
+                  this.state = 'hover'; // Hack to work with Highchart v4.0.4
+                  this.graphic.attr({
+                    'stroke-width': 2,
+                    'stroke': '#00f'
+                  })
                 },
                 mouseOut: function () {
-                  this.graphic.element.setAttribute('stroke-width', 0);
+                  this.state = ''; // Hack to work with Highchart v4.0.4
+                  this.graphic.attr({
+                    'stroke-width': 0,
+                  })
                 }
               }
             }
